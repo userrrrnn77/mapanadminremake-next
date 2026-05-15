@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useUserStore } from "../store";
 import api from "@/services/_axios";
 import { createUser, userAssignment } from "../types";
@@ -15,20 +15,21 @@ export const useUser = () => {
   } = useUserStore();
 
   const [isActionLoading, setIsActionLoading] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
 
   // 1. Ambil Semua Kuli (Admin View)
-  const fetchAllUsers = async () => {
+  const fetchAllUsers = useCallback(async () => {
     setLoading(true);
+
     try {
       const res = await api.get("/user");
-      // Kita langsung set datanya sesuai interface IUser lu bre
       setUsers(res.data.data || res.data);
     } catch (err) {
-      console.error("Gagal ambil daftar kuli, bgsd!", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [setLoading, setUsers]);
 
   // 2. Create User (Pake interface createUser lu bre)
   const createNewUser = async (body: createUser) => {
@@ -66,6 +67,20 @@ export const useUser = () => {
     }
   };
 
+  const fetchDashboardStats = useCallback(async () => {
+    setIsActionLoading(true);
+    try {
+      const res = await api.get("/user/dashboard");
+      setDashboardData(res.data.data || res.data);
+      return { success: true, data: res.data.data || res.data };
+    } catch (err) {
+      console.error("Gagal menarik data statistik dashboard:", err);
+      return { success: false, error: "Gagal memuat statistik." };
+    } finally {
+      setIsActionLoading(false);
+    }
+  }, []);
+
   return {
     users,
     selectedUser,
@@ -74,5 +89,7 @@ export const useUser = () => {
     createNewUser,
     assignUser,
     setSelectedUser,
+    dashboardData,
+    fetchDashboardStats,
   };
 };

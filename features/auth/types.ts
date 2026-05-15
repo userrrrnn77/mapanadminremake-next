@@ -35,7 +35,8 @@ type Shift = (typeof SHIFTS)[number];
 /**
  * 🔥 INTERFACE
  */
-export interface IUser extends Document {
+export interface IUser {
+  _id: string;
   username: string;
   password: string;
   fullname: string;

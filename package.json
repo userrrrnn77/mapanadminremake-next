@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "systemd-run --user --scope -p CPUQuota=140% -p MemoryHigh=2.5G -p MemoryMax=3.5G taskset -c 0-3 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

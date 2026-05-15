@@ -1,5 +1,5 @@
 // features/report/hooks/useReport.ts
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useReportStore } from "../store";
 import api from "@/services/_axios";
 import { CreateReportBody, ReportStatus } from "../types";
@@ -17,7 +17,7 @@ export const useReport = () => {
   const [isActionLoading, setIsActionLoading] = useState(false);
 
   // 1. Tarik Semua Laporan (Admin View)
-  const fetchAllReports = async () => {
+  const fetchAllReports = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get("/report");
@@ -27,7 +27,7 @@ export const useReport = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setLoading, setReports]);
 
   // 2. Buat Laporan Baru
   const createReport = async (body: CreateReportBody) => {

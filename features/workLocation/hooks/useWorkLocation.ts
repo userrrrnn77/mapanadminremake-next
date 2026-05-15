@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useWorkLocationStore } from "../store";
 import api from "@/services/_axios";
 import { IWorkLocation } from "../types";
@@ -17,7 +17,7 @@ export const useWorkLocation = () => {
   const [isActionLoading, setIsActionLoading] = useState(false);
 
   // 1. Tarik Semua Lokasi Kerja (Admin View)
-  const fetchAllLocations = async () => {
+  const fetchAllLocations = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get("/work-location");
@@ -28,7 +28,7 @@ export const useWorkLocation = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setLoading, setLocations]);
 
   // 2. Tambah Lokasi Baru (Pake interface IWorkLocation lu bre)
   const createLocation = async (body: IWorkLocation) => {

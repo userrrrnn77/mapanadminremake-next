@@ -1,3 +1,5 @@
+// features/user/api.ts
+
 import api from "@/services/_axios";
 import { createUser, userAssignment } from "./types";
 
@@ -16,6 +18,7 @@ export const updateUserStatusReq = async (id: string, status: string) => {
   return response.data;
 };
 
+// features/user/api.ts
 export const getDashboardStatsReq = async () => {
   const response = await api.get("/user/dashboard");
   return response.data;
